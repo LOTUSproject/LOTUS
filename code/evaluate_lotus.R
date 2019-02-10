@@ -1,5 +1,5 @@
 
-rm(list=ls())
+rm(list = ls())
 
 source('lotus.R')
 source('evaluation.R')
