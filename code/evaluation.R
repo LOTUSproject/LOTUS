@@ -1,6 +1,6 @@
 
 
-cross_validation_evaluation <- function(x,positives,n_folds=5,files='',task=1,files_similarity='',n_repeats=1,alpha=.5,beta=.5,weight=c(1,1)) {
+cross_validation_evaluation <- function(x, positives, n_folds = 5, files = '', task = 1, files_similarity = '', n_repeats = 1, alpha = .5, beta= . 5, weight = c(1, 1)) {
 	
     ## This function computes the performance of LOTUS in terms of consistency error.
     ## The arguments have to satisfy the following conditions:
@@ -19,18 +19,18 @@ cross_validation_evaluation <- function(x,positives,n_folds=5,files='',task=1,fi
     require('kernlab')
 	
     n_genes <- dim(x)[1]
-    n_task <- ceiling(max(positives)/n_genes)
+    n_task <- ceiling(max(positives) / n_genes)
     	    
     ## Get specific positives
     
-    specific_positives <- positives[which((positives>(n_genes*(task-1)))&(positives<=(n_genes*task)))]
+    specific_positives <- positives[which((positives > (n_genes * (task - 1))) & (positives <= (n_genes * task)))]
     n_pos <- length(specific_positives)
         
     ## Make folds (each fold is a subset of positive examples that will be hidden at each iteration)
 	
     folds <- list()
     for (i in seq(n_repeats)) {
-		    folds <- c(folds,split(sample(seq(n_pos)),rep(1:n_folds,length=n_pos)))
+		    folds <- c(folds, split(sample(seq(n_pos)), rep(1:n_folds, length = n_pos)))
     }
     n_iter <- length(folds)
 
@@ -39,25 +39,25 @@ cross_validation_evaluation <- function(x,positives,n_folds=5,files='',task=1,fi
     pred = list()
     true_labels = list()
     for (iter in seq(n_iter)) {
-        cat('-iteration',iter,'-')
+        cat('-iteration', iter, '-')
         # Move some positive examples to candidates
-	cvposset <- setdiff(positives,specific_positives[folds[[iter]]])
+	cvposset <- setdiff(positives, specific_positives[folds[[iter]]])
         # Make predictions
-        pred[[iter]] <- lotus(x=x,positives=cvposset,n_folds=n_folds,files=files,task=task,files_similarity=files_similarity,alpha=alpha,beta=beta,weight=weight)
+        pred[[iter]] <- lotus(x = x, positives = cvposset, n_folds = n_folds, files = files, task = task, files_similarity = files_similarity, alpha = alpha, beta = beta, weight = weight)
         
         # Compute labels
-        lab <- matrix(0,1,n_genes)
-        lab[specific_positives-n_genes*(task-1)] <- 1
-        lab <- lab[-(intersect(cvposset,specific_positives)-n_genes*(task-1))]
+        lab <- matrix(0, 1, n_genes)
+        lab[specific_positives - n_genes * (task - 1)] <- 1
+        lab <- lab[-(intersect(cvposset, specific_positives) - n_genes * (task - 1))]
         true_labels[[iter]] <- lab
         
     }
 
     # Estimate performance
 	
-    p <- prediction(pred,true_labels)
-    auc <- mean(unlist(performance(p,"auc")@y.values))
-    meanrank <- (n_genes-n_pos)*(1-auc)
+    p <- prediction(pred, true_labels)
+    auc <- mean(unlist(performance(p, "auc")@y.values))
+    meanrank <- (n_genes - n_pos) * (1 - auc)
 
     return(meanrank)
 
