@@ -39,7 +39,7 @@ switch(driver_type,
 
 ind_positives <- c()
 for(i in seq(length(genes_per_disease))){
-  ind_positives <- c(ind_positives, n_genes * (i-1) + which(gene_names %in% genes_per_disease[[i]]))
+  ind_positives <- c(ind_positives, n_genes * (i - 1) + which(gene_names %in% genes_per_disease[[i]]))
 }
 
 ## Cross-validation parameters
@@ -58,7 +58,7 @@ switch(version,
        beta = 0.5},
        'lotus2' = {alpha = 1
        beta = 1},
-       'aggregation' = {alpha=0
+       'aggregation' = {alpha = 0
        beta = 1},
        'onetask' = {alpha = 1
        beta = 0})
@@ -67,7 +67,7 @@ files_similarity <- ''
 if (version == 'lotus2')
   files_similarity <- 'Kernel_similarity.RData'
 
-weight <- c(1,1)
+weight <- c(1, 1)
 
 res <- cross_validation_evaluation(x = x, positives = ind_positives, n_folds = n_folds, files = files, task = task, files_similarity = files_similarity, n_repeats = n_repeats, alpha = alpha, beta = beta, weight = weight)
 
