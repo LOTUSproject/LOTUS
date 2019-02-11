@@ -15,7 +15,7 @@ set.seed(seed)
 
 driver_type <- 'tsg' # 'tsg' or 'og'
 task <- 2
-version <- 'onetask' # 'lotus' for LOTUS, 'lotus2' for LOTUS2, 'aggregation' for aggregation LOTUS and 'onetask' for onetask LOTUS
+version <- 'lotus' # 'lotus' for LOTUS, 'lotus2' for LOTUS2, 'aggregation' for aggregation LOTUS and 'onetask' for onetask LOTUS
 
 ## Load driver lists
 
